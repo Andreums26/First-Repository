@@ -23,7 +23,7 @@ if np.mean(y) >0 :
     dummy = 1
     
 else :
-    dummy = 1
+    dummy = 0
         
 print(dummy)
 
@@ -32,8 +32,8 @@ Nested If statement
 
 """
 
-# v = 2
-v = np.nan
+v = 2
+# v = np.nan
 # v = "String"
 # v = False
 
