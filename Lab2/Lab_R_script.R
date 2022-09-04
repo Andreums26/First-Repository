@@ -68,7 +68,7 @@ while (year < n){
 
 #### While + If statement 
 
-w <- 10
+w <- runif(20,0,500)
 
 while (w > 7  & w <= 15){
   coin <- round( runif(1) )

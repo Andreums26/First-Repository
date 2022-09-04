@@ -1,0 +1,53 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Sep  3 15:04:31 2022
+
+@author: henryandreumarquezsalinas
+"""
+
+"""
+Para el vector
+"""
+
+import numpy as np
+import random
+import math
+
+y = np.arrange(0,100)
+
+def calculator(y,h,z):
+    
+    h = max(y)
+    z = min(y)
+    
+    if not isinstance( y , np.arange ) :      
+        raise TypeError( "x must be a n-arrange")
+        
+    result = (y - h) / (z - h)
+    
+    return result
+
+calculator(y, h, z)
+print( calculator( y, h, z )
+      
+
+""""
+Para la matriz
+"""
+
+M = np.array(-10, 0, 500)
+
+def calculator(M,k,l):
+    
+    if not isinstance( M , np.narray ) :      
+        raise TypeError( "x must be a n-array")
+    k = max(M)
+    l = max(M)
+    result = (M - k) / (l - k)
+    
+    return result
+
+calculator(M, k, l)
+print( calculator( M, k, l )
+
