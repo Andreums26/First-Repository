@@ -1,24 +1,38 @@
-##Usamos libería para poder subir archivos excel
-library(readxl) 
-##Adaptamos el directorio
+# Instalar paquetes
+
+install.packages("dplyr")
+install.packages("readr")
+install.packages("tidyr")
+
+# Usamos liberÃ­a para poder subir archivos excel
+
+library(dplyr)
+library(tidyr)
+library(readxl)
+
+# Adaptamos el directorio
+
 user <- Sys.getenv("USERNAME")  # username
 print(user)
-setwd( paste0("C:/Users/",user,"/Documents/GitHub/1ECO35_2022_2/Lab3") ) # set directorio
-junin_data <- read_excel("../data/Region_Junin.xlsx")
-##reemplazamos vacíos por missing
-junin_data <- read_excel("../data/Region_Junin.xlsx", na="")
+setwd( paste0("/Users/", user, "/Documents/GitHub/First-Repository") ) # set directorio
+junin_data <- read_excel("/Users/", user, "/Documents/GitHub/First-Repository/Region_Junin.xlsx")
+
+# reemplazamos vacÃ­os por missing
+junin_data <- read_excel("/Users/", user,"/Documents/GitHub/First-Repository/Region_Junin.xlsx", na="")
 
 # Filas y columnas
-dim(junin_data) 
+dim(junin_data)
 
 # Clase de estructura de objeto
 
 class(junin_data)
 
-##para convertir cada columna como objeto
+# Para convertir cada columna como objeto
 attach(junin_data)
 
-# InformaciÃ³n de cada variable
+# -------------------------------------------------------
+
+# 1. InformaciÃ³n de cada variable
 
 str(junin_data)
 
@@ -32,7 +46,7 @@ sapply(junin_data, class) # sapply(x, FUN):: vector, Datrame,
 
 summary(junin_data) # 
 
-### ***Exploring a DataFrame***:
+### 2. ***Exploring a DataFrame***:
 
 class( junin_data["Place"] ) # Dataframe
 junin_data["Place"]
@@ -43,18 +57,18 @@ class( junin_data$Place ) # lista o vector
 
 #-----------------------------------------------------------------------
 
-## revisando missing values
+## 3. Revisando missing values
 
 " En R, tenemos dos formas de missing, en general, NA y Null "
 unique(Place) 
 
-any( is.na(junin_data["Place"]) ) # Salió TRUE: por lo menos hay un missing value
+any( is.na(junin_data["Place"]) ) # Sali? TRUE: por lo menos hay un missing value
 
 any(is.na(junin_data["total_write"])) #TRUE
 
-any(is.na(junin_data$Region)) #False: no hay ningún missing value en region
+any(is.na(junin_data$Region)) #False: no hay ning?n missing value en region
 
-any(is.na(women_read))  #  al menos una observación  es Missing
+any(is.na(women_read))  #  al menos una observaci?n  es Missing
 
 any(is.na(total_read)) #False
 
@@ -67,8 +81,7 @@ any(is.na(natives)) #True
 sum(is.na(Place)) #Hay 11 missings
 
 ## Manipulando missing values
-install.packages("tidyr")
-library(tidyr)
+
 junin_data %>% drop_na() 
 
 junin_data2 <- junin_data %>% drop_na()  # borras todas las filas con missig values
@@ -79,12 +92,53 @@ junin_data2 <- junin_data %>% drop_na(Place)
 
 junin_data2 <- junin_data %>% replace_na(list(Place = "Place1"))
 
-"En R debe asignarse el objeto alterado a uno nuevo. En este caso a Netflix2"
+"En R debe asignarse el objeto alterado a uno nuevo. En este caso a junin_data2"
+
 #----------------------------------------------------------------------------
 
-#Cambiamos los nombres de las variables
+# 4. Cambiamos los nombres de las variables
+
+install.packages("reshape")
+
 names(junin_data) #verificamos cuales son los nombres de las variables
 
-junin_data <- rename(junin_data, c("comunidad"="Place", "homxlee" = "men_not_read", "mujerxlee" = "women_not_read", "totalxlee" = "total_not_read" ))
+require(reshape)
+junin_data <- rename(junin_data, c(Place = "Comunidad", men_not_read = "homxlee", women_not_read = "mujerxlee", total_not_read = "totalxlee" ))
                      
 names(junin_data) #verificamos el cambio de nombre de la variables
+
+#----------------------------------------------------------------------------
+
+# 5. Valores Ãºnicos de las siguientes variables ( comunidad , District)
+
+junin_data2 <- junin_data[,c('Comunidad','District')] # seleccionar variables
+
+unique(junin_data2) #mostrar valores Ãºnicos de ambas variables
+
+# Ahora por variable
+# Para Comunidad
+
+junin_data2 <- junin_data[,c('Comunidad')] # seleccionar variable
+
+unique(junin_data2) #mostrar valores Ãºnicos
+
+# Para District
+
+junin_data2 <- junin_data[,c('District')] # seleccionar variable
+
+unique(junin_data2) #mostrar valores Ãºnicos
+
+
+#----------------------------------------------------------------------------
+
+# 6. Crear columnas con la siguiente informaciÃ³n
+
+mujer_noescribenilee <- junin_data$mujerxlee/ junin_data$totalxlee
+hombre_noescribenilee <- junin_data$homxlee/ junin_data$totalxlee
+nativos_total <- junin_data$natives/(peruvian_men + peruvian_women + foreign_men + foreign_women)
+
+junin_data <- cbind(junin_data[, c(1, 3)],mujer_noescribenilee, hombre_noescribenilee, nativos_total)
+
+#----------------------------------------------------------------------------
+
+# 7. Nueva base de datos
