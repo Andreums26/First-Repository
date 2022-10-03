@@ -9,12 +9,13 @@ import os       # for usernanme y set direcotrio
 from scipy.stats import t       # t - student 
 
 
-# Creamos clase
 
-class OLSRegClass( object ):   # también podemos omitir object, pues es lo mismo
+# creamos clase
+
+class OLSRegClass( object ):    # también podemos omitir object, pues es lo mismo
     
-    def __init__( self,  X : pd.DataFrame,  y : pd.Series, lista, RobustStandardError=True ):    # X:pd.DataFrame  indica que debe ser un dataframe
-                                                                                                # y:pd.Series  indica que debe ser una serie
+    def __init__( self,  X:pd.DataFrame,  y:pd.Series, lista, RobustStandardError=True ):    # X:pd.DataFrame  indica que debe ser un dataframe
+                                                                                                     # y:pd.Series  indica que debe ser una serie
         ## CONDICIONAL PARA X:pd.DataFrame ###
         if not isinstance( X, pd.DataFrame ):                  # si X no es dataframe, arroja error
             raise TypeError( "X must be a pd.DataFrame." )
@@ -24,8 +25,8 @@ class OLSRegClass( object ):   # también podemos omitir object, pues es lo mism
             raise TypeError( "y must be a pd.Series." )
         
         # ## CONDICIONAL PARA y:pd.Series    ###
-        if not isinstance( lista, pd.Series ):                 # si lista no es series, arroja error
-            raise TypeError( "lista must be a pd.Series." )
+        # if not isinstance( lista, pd.Series ):                 # si lista no es series, arroja error
+        #     raise TypeError( "lista must be a pd.Series." )
         
         
         # asignando atributos de la clase
@@ -82,7 +83,7 @@ class OLSRegClass( object ):   # también podemos omitir object, pues es lo mism
     def var_stderrors_cfdinterval( self ):
         
         #################
-        ### VARIANZA  ###
+        ### VARIANCE  ###
         
         # Se corre la función beta_OLS que estima el vector de coeficientes
         self.beta_OLS_Reg()
@@ -94,10 +95,10 @@ class OLSRegClass( object ):   # también podemos omitir object, pues es lo mism
         # beta_ols
         beta_OLS = self.beta_OLS.values.reshape( - 1, 1 ) # Dataframe a vector columna 
 
-        # errores
+        # errors
         e = y_np - ( X_np @ beta_OLS )
 
-        # Varianza de los errores
+        # error variance
         N = X_np.shape[ 0 ]
         total_parameters = X_np.shape[ 1 ]
         error_var = ( (e.T @ e)[ 0 ] )/( N - total_parameters )
@@ -113,8 +114,8 @@ class OLSRegClass( object ):   # también podemos omitir object, pues es lo mism
 
         
         #######################
-        ### ERRORES ESTÁNDAR  ###
-        
+        ### STANDAR ERRORS  ###
+       
         # var y beta
         beta_OLS = self.beta_OLS.values.reshape( -1, 1 )   # -1 significa cualquier número de filas
         var_OLS  = self.var_OLS.values
@@ -122,7 +123,6 @@ class OLSRegClass( object ):   # también podemos omitir object, pues es lo mism
         # standard errors
         beta_stderror = np.sqrt( np.diag( var_OLS ) )
         
-        # test estadístico para cada coeficiente
         table_data0 = {  "Std.Err." : beta_stderror.ravel()}
         
         # defining index names
@@ -133,7 +133,7 @@ class OLSRegClass( object ):   # también podemos omitir object, pues es lo mism
         
         
         ###########################
-        ### Intervalos de confianza (5%) ###
+        ### Confidence interval ###
         
         up_bd = beta_OLS.ravel() + 1.96*beta_stderror
         lw_bd = beta_OLS.ravel() - 1.96*beta_stderror

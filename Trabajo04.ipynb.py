@@ -19,7 +19,7 @@ from scipy.stats import t # t - student
 
 # Creamos clase
 
-class RegOLSClass( object ):   # también podemos omitir object, pues es lo mismo
+class OLSRegClass( object ):   # también podemos omitir object, pues es lo mismo
     
     def __init__( self,  X:pd.DataFrame,  y:pd.Series, lista, intercept, RobustStandardError=True ):    # X:pd.DataFrame  indica que debe ser un dataframe
                                                                                                 # y:pd.Series  indica que debe ser una serie
@@ -253,13 +253,9 @@ class RegOLSClass( object ):   # también podemos omitir object, pues es lo mism
 
 # leemos las base de datos sin cambiar nombre de usuario
 
-pip install pyreadr
-import pyreadr
-
-
 user = os.getlogin()   # Username
-os.chdir(f"/Users/henryandreumarquezsalinas/Documents/GitHub/First-Repository")  # Set directorio
-cps2012_env = pyreadr.read_r(".../data/cps2012.RData")    # output formato diccionario
+os.chdir(f"C:/Users/{user}/Documents/GitHub/1ECO35_2022_2/Lab4")  # Set directorio
+cps2012_env = pyreadr.read_r("../data/cps2012.Rdata")    # output formato diccionario
 cps2012 = cps2012_env[ 'data' ]    # extrae iformación almacenada en la llave data del diccionario cps2012_env
 dt = cps2012.describe()
     
@@ -296,11 +292,13 @@ reg1.robust_var_se_cfdinterval()
 reg1.robust_var
 
 # Ejecutando Método 4
+
 reg1.R2_rootMSE()
 reg1.R2
 reg1.rootMSE    
 
 # Ejecutando Método 5
+
 reg1.output()
 
 
@@ -318,14 +316,7 @@ for i in error.values:
     A = i**2
     residuosalcuadrado.append(A)
 
-V = np.fill_diagonal(V, np.diag(residuosalcuadrado))
-
-
-
-
-
-# solo faltaría metodo 3           
-        
+V = np.fill_diagonal(V, np.diag(residuosalcuadrado))       
         
         
         
